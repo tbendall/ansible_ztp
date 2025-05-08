@@ -1,0 +1,25 @@
+all:
+  hosts:
+    PE1:
+    P1:
+    P2:
+    PE2:
+    BRAS:
+    BRAS3:
+  children:
+    p_routers:
+      hosts:
+        P1:
+        P2:
+    pe_routers:
+      hosts:
+        PE1:
+        PE2:
+        BRAS3:
+    bras:
+      hosts:
+        BRAS:
+        BRAS3:
+  vars:
+    ansible_connection: ansible.netcommon.netconf
+    ansible_network_os: junipernetworks.junos.junos

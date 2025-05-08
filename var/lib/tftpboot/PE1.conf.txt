@@ -1,0 +1,30 @@
+system {
+    host-name PE1;
+    login {
+        user lab {
+            uid 2000;
+            class super-user;
+            authentication {
+                encrypted-password ""; ## SECRET-DATA
+            }
+        }
+    }
+    root-authentication {
+        encrypted-password ""; ## SECRET-DATA
+    }
+    services {
+        ssh;
+        netconf {
+            ssh;
+        }
+    }
+}
+interfaces {
+    fxp0 {
+        unit 0 {
+            family inet {
+                address 10.1.0.101/24;
+            }
+        }
+    }
+}

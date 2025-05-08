@@ -1,0 +1,17 @@
+---
+
+- name: Generate config files
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    
+  - name: Generate config
+    template:
+      src: /etc/ansible/templates/template_vlan_100_ints.j2
+      dest: /etc/ansible/config/{{ inventory_hostname }}_vlan_100.cfg
+
+#  - name: Add config to devices
+#    junipernetworks.junos.junos_config:
+#      src: /etc/ansible/config/{{ inventory_hostname }}_vlan_100.cfg
+#      update: update

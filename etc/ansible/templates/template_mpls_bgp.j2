@@ -1,0 +1,62 @@
+{{ hostname }}
+
+set system login user lab uid 2000
+set system login user lab class super-user
+set system login user lab authentication encrypted-password <encrypted-password>
+set system root-authentication encrypted-password <encrypted-password>
+set system services ssh
+set system services netconf ssh
+
+set interfaces fxp0.0 family inet address {{ ansible_host }}/24
+
+set interfaces {{ interface_1 }} description "LINK to {{ interface_1_remote_host }}"
+set interfaces {{ interface_1 }} vlan-tagging
+set interfaces {{ interface_1 }} unit 100 family inet address {{ interface_1_ip_mask }}
+set interfaces {{ interface_1 }} unit 100 vlan-id 100
+set interfaces {{ interface_1 }} unit 100 family iso
+set interfaces {{ interface_1 }} unit 100 family mpls
+
+{% if interface_2 is defined %}
+set interfaces {{ interface_2 }} description "LINK to {{ interface_2_remote_host }}"
+set interfaces {{ interface_2 }} vlan-tagging
+set interfaces {{ interface_2 }} unit 100 family inet address {{ interface_2_ip_mask }}
+set interfaces {{ interface_2 }} unit 100 vlan-id 100
+set interfaces {{ interface_2 }} unit 100 family iso
+set interfaces {{ interface_2 }} unit 100 family mpls
+
+set protocols mpls interface {{ interface_2 }}.100
+set protocols mpls interface lo0.0
+
+set protocols ldp interface {{ interface_2 }}.100
+set protocols ldp interface lo0.0
+
+set protocols isis interface {{ interface_2 }}.100
+set protocols isis interface lo0.0
+{% endif %}
+
+set protocols mpls interface {{ interface_1 }}.100
+
+set protocols ldp interface {{ interface_1 }}.100
+set protocols ldp interface lo0.0
+
+set protocols isis interface {{ interface_1 }}.100
+set protocols isis interface lo0.0
+
+
+set interfaces lo0 unit 0 family inet address {{ loopback_ip }}
+set interfaces lo0 unit 0 family iso address {{ loopback_clns }}
+
+set routing-options autonomous-system 65000
+
+delete protocols bgp group RR-client
+
+set protocols bgp group RR-client type internal
+set protocols bgp group RR-client peer-as 65000
+set protocols bgp group RR-client local-address {{ loopback_ip.split("/")[0] }}
+set protocols bgp group RR-client family inet unicast
+set protocols bgp group RR-client family evpn signaling
+{% if route_reflector == loopback_ip %}set protocols bgp group RR-client cluster {% set loopback_ip_ip = loopback_ip.split("/") %}{{ loopback_ip_ip[0] }}{% endif %}
+
+{% for i in peers %}
+set protocols bgp group RR-client neighbor {{ i }}
+{% endfor %}

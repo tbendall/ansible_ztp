@@ -1,0 +1,16 @@
+---
+
+hostname: p2
+ansible_host: 10.1.0.105
+interface_1: ge-0/0/1
+interface_1_remote_host: p1
+interface_1_ip_mask: 10.2.0.3/31
+interface_2: ge-0/0/0
+interface_2_remote_host: pe2
+interface_2_ip_mask: 10.2.0.4/31
+loopback_ip: 10.254.0.3/32
+loopback_clns: 49.0001.1025.4000.0003.00
+route_reflector: client
+peers: 
+  - 10.254.0.2
+ 

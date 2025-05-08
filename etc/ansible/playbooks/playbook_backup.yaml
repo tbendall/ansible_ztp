@@ -1,0 +1,16 @@
+---
+
+- name: Backup config
+  hosts: all
+  gather_facts: false 
+
+
+  tasks:
+
+    - name: Get committed config
+      junipernetworks.junos.junos_config:
+        backup: yes
+        backup_options:
+          filename: backup_config/{{ hostname }}.cfg
+          dir_path: /etc/ansible/
+

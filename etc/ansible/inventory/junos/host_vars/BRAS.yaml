@@ -1,0 +1,9 @@
+---
+
+
+
+hostname: bras
+ansible_host: 10.1.0.120
+bras_server_int: ge-0/0/0
+network_int: ge-0/0/7
+mgmt_int: fxp0

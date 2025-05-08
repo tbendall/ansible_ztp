@@ -1,0 +1,18 @@
+{% if prod_interfaces is defined %}
+{% for interface in prod_interfaces["vlan_100"] %}
+set interfaces {{ interface }} description "LINK to EVPN VLAN_100"
+set interfaces {{ interface }} flexible-vlan-tagging
+set interfaces {{ interface }} encapsulation flexible-ethernet-services
+set interfaces {{ interface }} unit 100 vlan-id 100
+set interfaces {{ interface }} unit 100 encapsulation vlan-bridge
+
+set routing-instances evpn_100 instance-type evpn 
+set routing-instances evpn_100 route-distinguisher {{ loopback_ip.split("/")[0] }}:100
+set routing-instances evpn_100 vrf-target target:100:100
+set routing-instances evpn_100 interface {{ interface }}.100
+set routing-instances evpn_100 protocols evpn interface {{ interface }}.100
+
+{% endfor %}
+{% endif %}
+
+{{ hostname }}

@@ -1,0 +1,17 @@
+---
+
+hostname: pe1
+ansible_host: 10.1.0.101
+interface_1: ge-0/0/0
+interface_1_remote_host: p1
+interface_1_ip_mask: 10.2.0.0/31
+loopback_ip: 10.254.0.1/32
+loopback_clns: 49.0001.1025.4000.0001.00
+route_reflector: client
+peers: 
+  - 10.254.0.2
+
+
+prod_interfaces:
+  vlan_100:
+    - ge-0/0/9
